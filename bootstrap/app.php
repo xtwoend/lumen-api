@@ -73,6 +73,7 @@ $app->routeMiddleware([
 */
 $app->configure('auth');
 $app->configure('fastpay');
+$app->configure('tiket');
 
 /*
 |--------------------------------------------------------------------------

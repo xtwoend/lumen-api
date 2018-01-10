@@ -12,4 +12,7 @@ $router->group([
     });
 
     $router->post('biller/process', 'BillerController');
+
+    $router->get('currency', 'TiketController@currency');
+    $router->post('flight/search', 'TiketController@searchFlight');
 });

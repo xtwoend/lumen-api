@@ -53,23 +53,19 @@ class Client
         }
 
         $xmlmrc_data = xmlrpc_encode_request($this->method, $this->params);
-        
-        // $response = $this->httpclient->request('POST', $this->url, [
-        //     'headers' => [
-        //         'Content-Type' => 'text/xml'
-        //     ],
-        //     'body' => $xmlmrc_data
-        // ]);
+        $response = $this->httpclient->request('POST', $this->url, [
+            'headers' => [
+                'Content-Type' => 'text/xml'
+            ],
+            'body' => $xmlmrc_data
+        ]);
+        $code = $response->getStatusCode(); // 200
+        $reason = $response->getReasonPhrase(); // OK
+        $content = $response->getBody()->getContents(); // repsonse server
+        if($code !== 200) {
+            return $content;
+        }
 
-        // $code = $response->getStatusCode(); // 200
-        // $reason = $response->getReasonPhrase(); // OK
-        // $content = $response->getBody()->getContents();
-
-        // if($code !== 200) {
-        //     return $content;
-        // }
-
-        // return xmlrpc_decode($content);
-        return $xmlmrc_data;
+        return xmlrpc_decode($content);
     }
 }
