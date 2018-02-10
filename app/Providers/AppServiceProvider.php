@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use Dusterio\LumenPassport\LumenPassport;
+use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,7 +14,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Register lumen passport routes
-        LumenPassport::routes($this->app, ['prefix' => 'api/oauth']);
+        //
+    }
+
+    /**
+     * [boot description]
+     * @return [type] [description]
+     */
+    public function boot()
+    {
+        // Resource::withoutWrapping();
     }
 }

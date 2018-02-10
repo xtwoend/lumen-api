@@ -1,33 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Tiketcom;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Tiketcom\Client as TiketClient;
 
-class TiketController extends Controller
+class FlightController extends Controller
 {
+
     protected $tiket;
 
     public function __construct()
     {
         $this->tiket = new TiketClient();
     }
-
-    public function currency(Request $request)
+    
+    public function search(Request $request)
     {
-        $res = $this->tiket->method('/general_api/listCurrency')->call();
+        #http://api-sandbox.tiket.com/search/flight?d=CGK&a=DPS&date=2014-05-25&ret_date=2014-05-30&adult=1&child=0&infant=0&token=626de6cbccc25cf3f7a652fc933e49187efdbc54&v=3&output=xml
 
-        dd($res);
-    }
-
-    public function searchFlight(Request $request)
-    {
         $params = [
             'd' => $request->departure,
             'a' => $request->arrival,
-            'date' => $request->flight_date,
+            'date' => $request->date,
             'adult' => $request->adult,
             'child' => $request->get('child', 0),
             'infant' => $request->get('infant', 0),

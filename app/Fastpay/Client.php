@@ -13,6 +13,7 @@ class Client
     protected $httpclient;
     protected $method;
     protected $params;
+    protected $refs;
 
     public function __construct()
     {
@@ -46,13 +47,21 @@ class Client
         return $this;
     }
 
+    public function refs(array $refs = [])
+    {
+        $this->refs = $refs;
+        return $this;
+    }
+
     public function call()
     {
         if(empty($this->method)) {
             return ['error' => 'Unknown Method'];
         }
 
-        $xmlmrc_data = xmlrpc_encode_request($this->method, $this->params);
+        $params = array_merge($this->params, [$this->uid, $this->pin], $this->refs);
+        $xmlmrc_data = xmlrpc_encode_request($this->method, $params);
+        
         $response = $this->httpclient->request('POST', $this->url, [
             'headers' => [
                 'Content-Type' => 'text/xml'

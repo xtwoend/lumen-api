@@ -45,6 +45,42 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        return parent::render($request, $e);
+        return $this->renderJson($request, $e);
+    }
+
+    public function renderJson($request, Exception $e)
+    {
+        $rendered = parent::render($request, $e);
+        $success = false;
+        $status = $rendered->getStatusCode();
+        $data = [];
+        
+        if ($status === 422) {
+            $data['data'] = $e->errors();
+        }
+
+        if ($this->isDebugMode()) {
+            $data['debug'] = [
+                'exception' => get_class($e),
+                'line' => $e->getLine(),
+                'file' => basename( $e->getFile() )
+            ];
+        }
+
+        return response()->json(array_merge([
+            'success' => $success,
+            'response_code' => $status,
+            'message' => $e->getMessage()
+        ], $data), $status);
+    }
+
+    /**
+     * Determine if the application is in debug mode.
+     *
+     * @return Boolean
+     */
+    public function isDebugMode()
+    {
+        return (boolean) env('APP_DEBUG');
     }
 }

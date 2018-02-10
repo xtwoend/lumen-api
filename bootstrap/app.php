@@ -64,16 +64,7 @@ $app->singleton(
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
-    'api' => App\Http\Middleware\ApiMiddleware::class,
 ]);
-
-
-/*
-| Load config
-*/
-$app->configure('auth');
-$app->configure('fastpay');
-$app->configure('tiket');
 
 /*
 |--------------------------------------------------------------------------
@@ -86,12 +77,21 @@ $app->configure('tiket');
 |
 */
 
-$app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
+$app->configure('auth');
+$app->configure('fastpay');
+$app->configure('tiket');
+$app->configure('app');
+$app->configure('database');
+$app->configure('queue');
+$app->configure('cors');
+$app->configure('services');
+$app->configure('config');
 
-$app->register(Laravel\Passport\PassportServiceProvider::class);
-$app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
+$app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\AuthServiceProvider::class);
+$app->register(App\Providers\EventServiceProvider::class);
+$app->register(App\OAuth\OAuthMiddlewareServiceProvider::class);
+$app->register(Nord\Lumen\Cors\CorsServiceProvider::class);
 
 if ($app->environment('local')) {
     $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
